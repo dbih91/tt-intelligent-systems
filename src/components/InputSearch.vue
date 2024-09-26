@@ -27,6 +27,7 @@ withDefaults(defineProps<InputSearchProps>(), {
 <style lang="scss">
 .tt-input-search {
   position: relative;
+  display: block;
 
   &__input {
     border-radius: 8px;
@@ -52,7 +53,7 @@ withDefaults(defineProps<InputSearchProps>(), {
     pointer-events: none;
     user-select: none;
     right: 0.6rem;
-    top: -0.1rem;
+    top: 0.4rem;
   }
 }
 </style>
