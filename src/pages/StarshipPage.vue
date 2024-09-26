@@ -20,7 +20,11 @@ async function getStarship () {
   try {
     const response = await api.starship.get(starshipId.value)
 
-    starship.value = await response.json()
+    const data = await response.json()
+
+    if (data.name) {
+      starship.value = data
+    }
   } catch (error) {
     console.error(error)
   } finally {
@@ -34,8 +38,13 @@ onMounted(() => getStarship())
 <template>
   <div class="tt-starship-page">
     <h2>
-      {{ starship?.name || 'Loading...' }}
+      {{ loading ? 'Loading...' : (starship ? starship.name : 'Starship not found :(')}}
     </h2>
+    <router-link v-if="!loading && !starship" to="/starships">
+      <button>
+        To starships list
+      </button>
+    </router-link>
     <table
       v-if="starship"
       class="tt-starship-table"
