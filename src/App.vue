@@ -9,9 +9,9 @@
       >
       <img
         src="/logo.png"
-        alt="TT Spaceships logo"
+        alt="TT Starships logo"
       >
-      TT Spaceships
+      TT Starships
     </router-link>
   </header>
   <main>

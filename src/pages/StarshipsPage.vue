@@ -4,7 +4,8 @@
 
 <template>
   <div>
-    SpaceshipPage
+
+    StarshipPage
   </div>
 </template>
 

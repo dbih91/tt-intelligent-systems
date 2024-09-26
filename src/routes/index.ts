@@ -3,13 +3,13 @@ import { RouteRecordRaw } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'Spaceships',
-    component: () => import('../pages/SpaceshipsPage.vue')
+    name: 'Starships',
+    component: () => import('../pages/StarshipsPage.vue')
   },
   {
-    path: '/spaceship/:spaceshipId',
-    name: 'Spaceship',
-    component: () => import('../pages/SpaceshipPage.vue')
+    path: '/starship/:starshipId',
+    name: 'Starship',
+    component: () => import('../pages/StarshipPage.vue')
   },
   {
     path: '/:pathMatch(.*)*',
