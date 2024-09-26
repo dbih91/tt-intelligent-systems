@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import InputSearch from '../components/InputSearch.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import useApi from '../composibles/useApi.ts'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { debounce } from '../utils/debounce.ts'
 
 interface Starship {
   name: string,
@@ -27,8 +28,9 @@ interface Starship {
 
 const api = useApi()
 const route = useRoute()
+const router = useRouter()
 
-const search = ref<string>()
+const search = ref('')
 
 const loading = ref(false)
 const starships = ref<Starship[]>([])
@@ -40,25 +42,72 @@ const page = computed(() => {
 
   return route.params.pageId === '' || isNaN(page) ? 1 : page
 })
+const hasPreviousPage = ref(false)
+const hasNextPage = ref(false)
+
+const searchSend = ref('')
+const searchStarships = debounce(getStarships, 250)
+
+watch(search, () => {
+  if (searchSend.value !== search.value) {
+    if (page.value !== 1) {
+      return goTo(1)
+    }
+    searchStarships()
+  }
+})
 
 async function getStarships () {
   loading.value = true
   try {
-    const response = await api.spaceships.get(page.value)
+    searchSend.value = search.value
+    const response = await api.spaceships.get(page.value, searchSend.value)
 
     const data = await response.json()
 
-    starships.value = data.results
+    starships.value = data.results || []
     countStarships.value = starships.value.length
     totalStarships.value = data.count
-    pages.value = Math.ceil(totalStarships.value / countStarships.value)
+    pages.value = Math.ceil(totalStarships.value / 10)
+    hasNextPage.value = !!data.next
+    hasPreviousPage.value = !!data.previous
 
-    console.log(data)
+    console.log(page.value, data)
   } catch (error) {
     console.error(error)
   } finally {
     loading.value = false
   }
+}
+
+function goTo (newPage: number) {
+  starships.value = []
+  countStarships.value = 10
+  hasNextPage.value = false
+  hasPreviousPage.value = false
+  loading.value = true
+  router.push({
+    name: 'Starships',
+    params: {
+      pageId: (newPage).toString()
+    }
+  }).then(() => {
+    getStarships()
+  })
+}
+
+function previous () {
+  goTo(page.value - 1)
+}
+
+function next () {
+  goTo(page.value + 1)
+}
+
+function goToStarship () {
+  rourer.push({
+
+  })
 }
 
 onMounted(() => {
@@ -73,33 +122,50 @@ onMounted(() => {
       v-model="search"
       placeholder="Search Starship"
     />
-    <button v-if="loading" disabled>
-      Loading
-    </button>
-    <template v-else>
-      <div class="tt-starships-list">
-        <button
-          v-for="starship of starships"
-          :key="starship.name"
-          class="tt-starships-list__item"
-        >
-          {{ starship.name }}
-        </button>
-      </div>
-      <span
-        class="tt-starships-list__info"
-        v-if="!loading"
+    <div class="tt-starships-list">
+      <button
+        v-if="loading || starships.length === 0"
+        class="tt-starships-list__item"
+        disabled
       >
-        Showing {{ page * countStarships + 1 }} - {{ countStarships }} of {{ totalStarships }} results<br>
+        <span v-if="starships.length === 0">Loading...</span>
+        <span v-else>Nothing was found :(</span>
+        <sub>-</sub>
+      </button>
+      <button
+        v-for="starship of starships"
+        :key="starship.name"
+        class="tt-starships-list__item"
+        @click="goToStarship"
+      >
+        <span>{{ starship.name }}</span>
+        <sub>{{ starship.model }}</sub>
+      </button>
+      <button
+        v-for="index in Math.max(10 - starships.length - +loading, 0)"
+        :key="index"
+        class="tt-starships-list__item"
+        disabled
+      >
+        <span>-</span>
+        <sub>-</sub>
+      </button>
+    </div>
+    <span class="tt-starships-list__info">
+        Showing {{ page * 10 - 9 }} - {{ (page - 1) * 10 + countStarships }} of {{ totalStarships }} results<br>
         Page {{ page }} of {{ pages }}
       </span>
-    </template>
-
     <div class="tt-starships-pagination">
-      <button :disabled="loading">
+      <button
+        :disabled="loading || !hasPreviousPage"
+        @click="previous"
+      >
         Previous
       </button>
-      <button :disabled="loading">
+      <button
+        :disabled="loading || !hasNextPage"
+        @click="next"
+      >
         Next
       </button>
     </div>
@@ -127,7 +193,7 @@ onMounted(() => {
 
   &__item {
     display: flex;
-    align-items: center;
+    flex-flow: column;
     width: 512px;
     max-width: 100%;
   }
