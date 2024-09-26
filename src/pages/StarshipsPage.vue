@@ -61,7 +61,7 @@ async function getStarships () {
   loading.value = true
   try {
     searchSend.value = search.value
-    const response = await api.spaceships.get(page.value, searchSend.value)
+    const response = await api.starships.get(page.value, searchSend.value)
 
     const data = await response.json()
 

@@ -3,7 +3,7 @@ function swapiFetch (endpoint: string) {
 }
 
 export default {
-  spaceships: {
+  starships: {
     get (page: number, search?: string) {
       return swapiFetch(`starships/?page=${ page }${ search ? `&search=${ search }` : '' }`)
     }
