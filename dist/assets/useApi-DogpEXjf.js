@@ -1,0 +1,1 @@
+function r(t){return fetch(`https://swapi.dev/api/${t}`)}const e={starships:{get(t,s){return r(`starships/?page=${t}${s?`&search=${s}`:""}`)}},starship:{get(t){return r(`starships/${t}/`)}}};function p(){return e}export{p as u};
