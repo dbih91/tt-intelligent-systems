@@ -86,6 +86,8 @@ onMounted(() => {
   display: flex;
   flex-flow: column;
   gap: 16px;
+  max-width: 512px;
+  margin-inline: auto;
 }
 
 .tt-starships-list {
@@ -101,7 +103,8 @@ onMounted(() => {
   &__item {
     display: flex;
     align-items: center;
-    width: 256px;
+    width: 512px;
+    max-width: 100%;
   }
 }
 

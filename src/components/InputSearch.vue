@@ -28,7 +28,8 @@ withDefaults(defineProps<InputSearchProps>(), {
 .tt-input-search {
   position: relative;
   display: block;
-  width: 256px;
+  width: 512px;
+  max-width: 100%;
 
   &__input {
     width: 100%;
