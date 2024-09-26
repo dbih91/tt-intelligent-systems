@@ -1,3 +1,9 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -25,7 +31,7 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  flex-flow: column;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -75,5 +81,27 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+#app header {
+  display: flex;
+  padding: 4px 1rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 18px;
+  font-weight: 500;
+
+  &, &:hover {
+    color: currentColor;
+  }
+
+  img {
+    width: 32px;
+    height: 32px;
   }
 }
