@@ -5,27 +5,7 @@ import useApi from '../composibles/useApi.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { debounce } from '../utils/debounce.ts'
 import extractStarshipIdFromUrl from '../utils/extractStarshipIdFromUrl.ts'
-
-interface Starship {
-  name: string,
-  model: string,
-  manufacturer: string,
-  cost_in_credits: string,
-  length: string,
-  max_atmosphering_speed: string,
-  crew: string,
-  passengers: string,
-  cargo_capacity: string,
-  consumables: string,
-  hyperdrive_rating: string,
-  MGLT: string,
-  starship_class: string,
-  pilots: string[],
-  films: string[],
-  created: string,
-  edited: string,
-  url: string
-}
+import { Starship } from '../api/types.ts'
 
 const api = useApi()
 const route = useRoute()
