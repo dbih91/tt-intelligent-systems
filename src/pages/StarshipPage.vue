@@ -55,12 +55,13 @@ onMounted(() => getStarship())
         <tr><th>MGLT</th><td>{{ starship.MGLT }}</td></tr>
         <tr><th>Starship Class</th><td>{{ starship.starship_class }}</td></tr>
         <tr><th>Pilots</th><td>
-          <span
+          <a
             v-for="pilot of starship.pilots"
             :key="pilot"
+            :href="pilot"
           >
-            {{ pilot }}
-          </span>
+            {{ pilot }}<br>
+          </a>
           <span v-if="starship.pilots.length === 0">
             No Pilots
           </span>
