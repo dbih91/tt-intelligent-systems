@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import InputSearch from '../components/InputSearch.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import useApi from '../composibles/useApi.ts'
+import { useRoute } from 'vue-router'
 
 interface Starship {
   name: string,
@@ -25,20 +26,34 @@ interface Starship {
 }
 
 const api = useApi()
+const route = useRoute()
 
 const search = ref<string>()
 
 const loading = ref(false)
 const starships = ref<Starship[]>([])
+const countStarships = ref(0)
+const totalStarships = ref(0)
+const pages = ref(0)
+const page = computed(() => {
+  const page = +route.params.pageId
+
+  return route.params.pageId === '' || isNaN(page) ? 1 : page
+})
 
 async function getStarships () {
   loading.value = true
   try {
-    const response = await api.spaceships.get()
+    const response = await api.spaceships.get(page.value)
 
     const data = await response.json()
 
     starships.value = data.results
+    countStarships.value = starships.value.length
+    totalStarships.value = data.count
+    pages.value = Math.ceil(totalStarships.value / countStarships.value)
+
+    console.log(data)
   } catch (error) {
     console.error(error)
   } finally {
@@ -61,15 +76,25 @@ onMounted(() => {
     <button v-if="loading" disabled>
       Loading
     </button>
-    <div v-else class="tt-starships-list">
-      <button
-        v-for="starship of starships"
-        :key="starship.name"
-        class="tt-starships-list__item"
+    <template v-else>
+      <div class="tt-starships-list">
+        <button
+          v-for="starship of starships"
+          :key="starship.name"
+          class="tt-starships-list__item"
+        >
+          {{ starship.name }}
+        </button>
+      </div>
+      <span
+        class="tt-starships-list__info"
+        v-if="!loading"
       >
-        {{ starship.name }}
-      </button>
-    </div>
+        Showing {{ page * countStarships + 1 }} - {{ countStarships }} of {{ totalStarships }} results<br>
+        Page {{ page }} of {{ pages }}
+      </span>
+    </template>
+
     <div class="tt-starships-pagination">
       <button :disabled="loading">
         Previous
@@ -105,6 +130,10 @@ onMounted(() => {
     align-items: center;
     width: 512px;
     max-width: 100%;
+  }
+
+  &__info {
+    text-align: start;
   }
 }
 
