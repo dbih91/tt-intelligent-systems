@@ -4,6 +4,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import useApi from '../composibles/useApi.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { debounce } from '../utils/debounce.ts'
+import extractStarshipIdFromUrl from '../utils/extractStarshipIdFromUrl.ts'
 
 interface Starship {
   name: string,
@@ -104,9 +105,12 @@ function next () {
   goTo(page.value + 1)
 }
 
-function goToStarship () {
-  rourer.push({
-
+function goToStarship (starshipUrl: string) {
+  router.push({
+    name: 'Starship',
+    params: {
+      starshipId: extractStarshipIdFromUrl(starshipUrl)
+    }
   })
 }
 
@@ -136,7 +140,7 @@ onMounted(() => {
         v-for="starship of starships"
         :key="starship.name"
         class="tt-starships-list__item"
-        @click="goToStarship"
+        @click="goToStarship(starship.url)"
       >
         <span>{{ starship.name }}</span>
         <sub>{{ starship.model }}</sub>

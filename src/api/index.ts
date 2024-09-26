@@ -7,5 +7,10 @@ export default {
     get (page: number, search?: string) {
       return swapiFetch(`starships/?page=${ page }${ search ? `&search=${ search }` : '' }`)
     }
+  },
+  starship: {
+    get (starshipId: string) {
+      return swapiFetch(`starships/${starshipId }/`)
+    }
   }
 }
