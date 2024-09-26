@@ -19,11 +19,11 @@
     >
       Github Page
     </a>
-    <router-view to="/starships">
+    <router-link to="/starships">
       <button>
-        Starships
+        Starships 🚀
       </button>
-    </router-view>
+    </router-link>
   </div>
 </template>
 
