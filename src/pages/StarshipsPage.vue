@@ -13,7 +13,7 @@ const router = useRouter()
 
 const search = ref('')
 
-const loading = ref(false)
+const loading = ref(true)
 const starships = ref<Starship[]>([])
 const countStarships = ref(0)
 const totalStarships = ref(0)
@@ -27,7 +27,10 @@ const hasPreviousPage = ref(false)
 const hasNextPage = ref(false)
 
 const searchSend = ref('')
-const searchStarships = debounce(getStarships, 250)
+const searchStarships = debounce(() => {
+  clearData()
+  getStarships()
+}, 250)
 
 watch(search, () => {
   if (searchSend.value !== search.value) {
@@ -59,12 +62,16 @@ async function getStarships () {
   }
 }
 
-function goTo (newPage: number) {
+function clearData () {
   starships.value = []
   countStarships.value = 10
   hasNextPage.value = false
   hasPreviousPage.value = false
   loading.value = true
+}
+
+function goTo (newPage: number) {
+  clearData()
   router.push({
     name: 'Starships',
     params: {
@@ -110,7 +117,7 @@ onMounted(() => {
         class="tt-starships-list__item"
         disabled
       >
-        <span v-if="starships.length === 0">Loading...</span>
+        <span v-if="loading">Loading...</span>
         <span v-else>Nothing was found :(</span>
         <sub>-</sub>
       </button>
@@ -124,7 +131,7 @@ onMounted(() => {
         <sub>{{ starship.model }}</sub>
       </button>
       <button
-        v-for="index in Math.max(10 - starships.length - +loading, 0)"
+        v-for="index in Math.max(10 - starships.length - +(loading || starships.length === 0), 0)"
         :key="index"
         class="tt-starships-list__item"
         disabled
