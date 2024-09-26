@@ -68,6 +68,7 @@ onMounted(() => getStarship())
             v-for="pilot of starship.pilots"
             :key="pilot"
             :href="pilot"
+            target="_black"
           >
             {{ pilot }}<br>
           </a>
@@ -80,6 +81,7 @@ onMounted(() => getStarship())
             v-for="film of starship.films"
             :key="film"
             :href="film"
+            target="_black"
           >
             {{ film }}<br>
           </a>
