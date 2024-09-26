@@ -4,7 +4,15 @@
 
 <template>
   <div>
-    Sorry nothing was found.
+    <h2>
+      404
+    </h2>
+    <p>
+      Sorry, page was not found.
+    </p>
+    <router-link to="/">
+      Go to home page
+    </router-link>
   </div>
 </template>
 
