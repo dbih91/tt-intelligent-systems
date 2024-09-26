@@ -1,0 +1,13 @@
+<script setup lang="ts">
+
+</script>
+
+<template>
+  <div>
+    SpaceshipPage
+  </div>
+</template>
+
+<style lang="scss">
+
+</style>

@@ -2,9 +2,9 @@
 </script>
 
 <template>
-  <div>
-    tt-intelligent-systems
-  </div>
+  <main>
+    <router-view />
+  </main>
 </template>
 
 <style lang="scss" scoped>
