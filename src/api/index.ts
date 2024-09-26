@@ -4,8 +4,8 @@ function swapiFetch (endpoint: string) {
 
 export default {
   spaceships: {
-    get () {
-      return swapiFetch('starships')
+    get (page: number) {
+      return swapiFetch(`starships/?page=${ page }`)
     }
   }
 }
