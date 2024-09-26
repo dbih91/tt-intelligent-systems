@@ -88,7 +88,15 @@ button {
 
 #app header {
   display: flex;
-  padding: 4px 1rem;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+
+  .git-link {
+    img {
+      width: 32px;
+      height: 32px;
+    }
+  }
 }
 
 .logo {
