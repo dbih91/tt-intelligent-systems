@@ -9,7 +9,7 @@ export default {
     }
   },
   starship: {
-    get (starshipId: string) {
+    get (starshipId: number) {
       return swapiFetch(`starships/${starshipId }/`)
     }
   }

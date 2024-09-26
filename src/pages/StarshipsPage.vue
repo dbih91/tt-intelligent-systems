@@ -52,8 +52,6 @@ async function getStarships () {
     pages.value = Math.ceil(totalStarships.value / 10)
     hasNextPage.value = !!data.next
     hasPreviousPage.value = !!data.previous
-
-    console.log(page.value, data)
   } catch (error) {
     console.error(error)
   } finally {
